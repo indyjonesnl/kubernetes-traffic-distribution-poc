@@ -1,0 +1,31 @@
+{$SERVER_NAME:localhost} {
+     root * /app/public
+
+     # Compression
+     encode zstd br gzip
+
+     # Worker mode Symfony
+     php_server {
+        resolve_root_symlink
+     }
+
+     # Headers de sécurité
+     header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -X-Powered-By
+        -Server
+     }
+
+     # Cache assets statiques
+     @static path *.css *.js *.ico *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2
+     header @static Cache-Control "public, max-age=31536000, immutable"
+
+     # Logs
+     log {
+         output stdout
+         format console
+     }
+}
